@@ -69,19 +69,17 @@ header p {
 
 section {
   display: flex;
-
-  /* Horizontal scroll on large screens */
   overflow-x: auto;
 
   gap: 25px;
 
   padding: 50px 30px;
 
-  /* Smooth scrolling */
   scroll-behavior: smooth;
-
-  /* Scroll Snap */
   scroll-snap-type: x mandatory;
+
+  width: 85%;
+  margin: 0 auto;
 }
 
 /* Optional scrollbar styling */
@@ -107,6 +105,7 @@ section div {
 
   min-width: 320px;
   max-width: 320px;
+  height: 380px;
 
   border-radius: 15px;
 
@@ -114,23 +113,26 @@ section div {
 
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-
   position: relative;
 
-  /* Scroll Snap card alignment */
   scroll-snap-align: center;
 
   overflow: hidden;
+
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+
+  z-index: 1;
 }
 
-/* Hover Effects */
+/* Bigger hover effect */
 section div:hover {
-  transform: translateY(-10px) scale(1.02);
+  transform: translateY(-15px) scale(1.08);
 
-  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.25);
+
+  z-index: 100;
 }
 
 /* Year */
@@ -157,20 +159,38 @@ section img {
   margin-bottom: 15px;
 }
 
-/* Description Text */
+/* =========================
+   HOVER DESCRIPTION OVERLAY
+========================= */
+
 section p {
-  color: #4b5563;
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  background: rgba(0, 113, 197, 0.95);
+  color: white;
+
+  padding: 20px;
+
   font-size: 0.95rem;
+  line-height: 1.6;
 
-  /* Hidden until hover */
-  opacity: 0.75;
+  opacity: 0;
 
-  transition: opacity 0.3s ease;
+  transform: translateY(100%);
+
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
 }
 
-/* Reveal details more clearly on hover */
+/* Show description on hover */
 section div:hover p {
   opacity: 1;
+  transform: translateY(0);
 }
 
 /* =========================
