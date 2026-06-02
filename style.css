@@ -239,24 +239,34 @@ input:focus {
 /* =========================
    RTL SUPPORT
 ========================= */
+
 .rtl-mode {
-  direction: rtl;
+    direction: rtl !important;
+    text-align: right !important;
 }
+
+.rtl-mode * {
+    direction: rtl !important;
+}
+
+.rtl-mode .timeline-card,
+.rtl-mode .card-body,
+.rtl-mode .accordion-body,
+.rtl-mode .accordion-button,
+.rtl-mode .form-label,
+.rtl-mode footer,
+.rtl-mode p,
+.rtl-mode h1,
+.rtl-mode h2,
+.rtl-mode h3 {
+    text-align: right !important;
+}
+
 .rtl-mode .timeline-section {
-  flex-direction: row-reverse;
+    flex-direction: row-reverse;
 }
-.rtl-mode .timeline-card {
-  text-align: right;
-}
-.rtl-mode .card-body {
-  text-align: right;
-}
-.rtl-mode form {
-  text-align: right;
-}
-.rtl-mode .footer {
-  text-align: right;
-}
-.rtl-mode .footer nav a {
-  margin: 0 10px;
+
+.rtl-mode .me-2 {
+    margin-right: 0 !important;
+    margin-left: .5rem !important;
 }
