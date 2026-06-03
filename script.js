@@ -1,36 +1,77 @@
 const bootstrapLink = document.getElementById("bootstrap-css");
 
-function applyDirection() {
+const rtlLanguageCodes = [
+  "ar",
+  "fa",
+  "he",
+  "ur",
+  "ps",
+  "sd",
+  "ug",
+  "ku",
+  "yi",
+  "dv",
+  "ckb",
+];
 
-    const pageText = document.body.textContent || "";
+function isRtlLocale(locale) {
+  if (!locale) return false;
+  const normalized = locale.toLowerCase().trim();
+  return rtlLanguageCodes.some(
+    code => normalized === code || normalized.startsWith(`${code}-`)
+  );
+}
 
-    const rtlPattern =
-        /[\u0590-\u05FF\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/;
+function detectDirection() {
+  const htmlLang = document.documentElement.lang || "";
+  
+  // If HTML lang is explicitly set, use it as the primary source
+  if (htmlLang) {
+    return isRtlLocale(htmlLang) ? "rtl" : "ltr";
+  }
 
-    const isRTL = rtlPattern.test(pageText);
+  // Fallback to browser preferred languages
+  const browserLocales = navigator.languages || [];
+  if (browserLocales.some(isRtlLocale)) {
+    return "rtl";
+  }
 
-    document.documentElement.dir = isRTL ? "rtl" : "ltr";
-    document.body.dir = isRTL ? "rtl" : "ltr";
+  // Last resort: check for RTL characters in page content
+  const pageText = document.body.innerText || "";
+  const hasRtlCharacters = /[\u0591-\u07FF\uFB1D-\uFDFD\uFE70-\uFEFC]/.test(pageText);
+  return hasRtlCharacters ? "rtl" : "ltr";
+}
 
-    document.body.classList.toggle("rtl-mode", isRTL);
+function getBootstrapHref(direction) {
+  return direction === "rtl"
+    ? "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css"
+    : "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css";
+}
 
-    bootstrapLink.href = isRTL
-        ? "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css"
-        : "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css";
+function updateDirection() {
+  const direction = detectDirection();
+  const html = document.documentElement;
 
-    console.log("RTL Mode:", isRTL);
+  html.dir = direction;
+  document.body.dir = direction;
+
+  if (!html.lang) {
+    html.lang = navigator.language || "en";
+  }
+
+  bootstrapLink.href = getBootstrapHref(direction);
+  console.log("Direction:", direction, "lang:", html.lang);
 }
 
 window.addEventListener("load", () => {
-    applyDirection();
+  updateDirection();
+  setTimeout(updateDirection, 1000);
+  setTimeout(updateDirection, 2000);
+  setTimeout(updateDirection, 3000);
 
-    const observer = new MutationObserver(() => {
-        applyDirection();
-    });
-
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true,
-        characterData: true
-    });
+  new MutationObserver(updateDirection).observe(document.body, {
+    childList: true,
+    subtree: true,
+    characterData: true,
+  });
 });
